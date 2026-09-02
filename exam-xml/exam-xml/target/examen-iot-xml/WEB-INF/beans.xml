@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- VARIANTE 2: DI clasica por XML. Cada bean se declara a mano y
+         se conecta con <constructor-arg ref="..."> (constructor injection). -->
+
+    <bean id="deviceRepository" class="com.exam.iot.repository.InMemoryDeviceRepository"/>
+
+    <bean id="measurementRepository" class="com.exam.iot.repository.InMemoryMeasurementRepository"/>
+
+    <bean id="ioTService" class="com.exam.iot.service.IoTServiceImpl">
+        <constructor-arg ref="deviceRepository"/>
+        <constructor-arg ref="measurementRepository"/>
+    </bean>
+
+</beans>

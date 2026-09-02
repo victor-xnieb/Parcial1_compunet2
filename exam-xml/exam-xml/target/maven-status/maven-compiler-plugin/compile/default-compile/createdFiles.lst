@@ -1,0 +1,17 @@
+com/exam/iot/repository/MeasurementRepository.class
+com/exam/iot/repository/DeviceRepository.class
+com/exam/iot/service/exception/OutOfRangeException.class
+com/exam/iot/repository/InMemoryDeviceRepository.class
+com/exam/iot/service/IoTService.class
+com/exam/iot/servlet/AddFormServlet.class
+com/exam/iot/model/Measurement.class
+com/exam/iot/servlet/ListMeasurementsServlet.class
+com/exam/iot/servlet/AddMeasurementServlet.class
+com/exam/iot/service/exception/InvalidSerialNumberException.class
+com/exam/iot/repository/InMemoryMeasurementRepository.class
+com/exam/iot/service/exception/DuplicateTimestampException.class
+com/exam/iot/util/HtmlView.class
+com/exam/iot/service/exception/DeviceNotFoundException.class
+com/exam/iot/model/Device.class
+com/exam/iot/service/exception/InvalidIntervalException.class
+com/exam/iot/service/IoTServiceImpl.class

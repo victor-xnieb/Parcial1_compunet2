@@ -1,0 +1,17 @@
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/servlet/AddMeasurementServlet.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/repository/InMemoryDeviceRepository.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/repository/InMemoryMeasurementRepository.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/service/exception/DeviceNotFoundException.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/service/exception/DuplicateTimestampException.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/util/HtmlView.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/service/IoTServiceImpl.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/repository/MeasurementRepository.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/service/exception/OutOfRangeException.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/servlet/AddFormServlet.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/service/exception/InvalidIntervalException.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/repository/DeviceRepository.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/model/Device.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/service/IoTService.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/servlet/ListMeasurementsServlet.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/model/Measurement.java
+/home/xnieb/Documents/Semestre6/exam-xml(1)/exam-xml/src/main/java/com/exam/iot/service/exception/InvalidSerialNumberException.java
