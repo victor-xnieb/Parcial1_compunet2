@@ -1,0 +1,234 @@
+========================================================================
+PLANTILLAS DE VISTAS HTML - para usar dentro de un PrintWriter en un
+Servlet, o como archivo .html/.jsp suelto en webapp/
+========================================================================
+Copia el bloque que necesites y reemplaza los // TODO / <!-- TODO -->
+Mantenlas simples: lo importante es que funcionen, no que se vean lindas.
+========================================================================
+
+
+------------------------------------------------------------------------
+PLANTILLA 1 - Esqueleto basico de cualquier pagina
+Usalo como punto de partida para todas las demas
+------------------------------------------------------------------------
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title><!-- TODO: titulo de la pagina --></title>
+</head>
+<body>
+    <h1><!-- TODO: encabezado --></h1>
+
+    <!-- TODO: aqui va el contenido especifico (formulario, tabla, alerta, etc.) -->
+
+</body>
+</html>
+
+
+------------------------------------------------------------------------
+PLANTILLA 2 - Formulario simple (un campo de texto y uno numerico)
+Usalo para "crear un formulario que permita agregar/registrar X"
+------------------------------------------------------------------------
+
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Formulario</title></head>
+<body>
+    <h1><!-- TODO: ej "Agregar dispositivo" --></h1>
+
+    <!-- TODO: action debe ser la ruta del servlet que procesa el formulario -->
+    <!-- method="post" porque este formulario CREA/MODIFICA algo -->
+    <form method="post" action="RUTA_DEL_SERVLET">
+
+        <label>Campo texto:</label>
+        <!-- TODO: "name" debe coincidir con el req.getParameter("...") del servlet -->
+        <input type="text" name="campoTexto" required><br>
+
+        <label>Campo numerico:</label>
+        <input type="number" name="campoNumero" required><br>
+
+        <label>Campo decimal:</label>
+        <input type="number" step="any" name="campoDecimal" required><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
+
+
+------------------------------------------------------------------------
+PLANTILLA 3 - Formulario con varios tipos de input (texto, numero, select,
+checkbox, fecha) por si el enunciado pide una entidad con muchos campos
+------------------------------------------------------------------------
+
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Formulario completo</title></head>
+<body>
+    <h1>Registrar <!-- TODO: nombre de la entidad --></h1>
+
+    <form method="post" action="RUTA_DEL_SERVLET">
+
+        <label>Nombre:</label>
+        <input type="text" name="nombre" required><br>
+
+        <label>Cantidad:</label>
+        <input type="number" name="cantidad" min="0" required><br>
+
+        <label>Valor:</label>
+        <input type="number" step="any" name="valor" required><br>
+
+        <!-- select para elegir entre opciones fijas, ej: tipo de sensor -->
+        <label>Tipo:</label>
+        <select name="tipo">
+            <option value="OPCION_1"><!-- TODO: texto visible --></option>
+            <option value="OPCION_2"></option>
+        </select><br>
+
+        <!-- checkbox para valores booleanos, ej: "activo" -->
+        <label>Activo:</label>
+        <input type="checkbox" name="activo" value="true"><br>
+
+        <!-- campo oculto: util cuando editas algo existente y necesitas mandar el id -->
+        <input type="hidden" name="id" value="ID_ACTUAL">
+
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>
+
+
+------------------------------------------------------------------------
+PLANTILLA 4 - Tabla de listado
+Usalo para "mostrar/listar todos los X"
+------------------------------------------------------------------------
+
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Listado</title></head>
+<body>
+    <h1>Listado de <!-- TODO: nombre de la entidad --></h1>
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <!-- TODO: un <th> por cada atributo que quieras mostrar -->
+            <th>Id</th>
+            <th>Campo1</th>
+            <th>Campo2</th>
+        </tr>
+
+        <!--
+            Si estas escribiendo esto desde un Servlet con PrintWriter,
+            aqui va un for/foreach en JAVA (fuera del HTML) que imprime
+            una fila <tr> por cada elemento de la coleccion. Ejemplo:
+
+            for (MiEntidad e : lista) {
+                out.println("<tr><td>" + e.getId() + "</td>"
+                        + "<td>" + e.getCampo1() + "</td>"
+                        + "<td>" + e.getCampo2() + "</td></tr>");
+            }
+
+            Si en cambio es un archivo .jsp con JSTL, seria:
+
+            <c:forEach var="e" items="${lista}">
+                <tr><td>${e.id}</td><td>${e.campo1}</td><td>${e.campo2}</td></tr>
+            </c:forEach>
+        -->
+
+    </table>
+
+    <a href="RUTA_DEL_FORMULARIO">Agregar nuevo</a>
+</body>
+</html>
+
+
+------------------------------------------------------------------------
+PLANTILLA 5 - Pagina de alerta / error (regla de negocio incumplida)
+Usalo cuando el service lanza una excepcion y hay que avisarle al usuario
+------------------------------------------------------------------------
+
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Alerta</title></head>
+<body>
+    <h1 style="color:red;">Alerta</h1>
+    <p><!-- TODO: mensaje de error, normalmente e.getMessage() del Servlet --></p>
+    <a href="RUTA_DEL_FORMULARIO">Volver a intentar</a>
+</body>
+</html>
+
+
+------------------------------------------------------------------------
+PLANTILLA 6 - Pagina de exito
+Usalo cuando la operacion (crear/actualizar/eliminar) se completo bien
+------------------------------------------------------------------------
+
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Exito</title></head>
+<body>
+    <h1 style="color:green;">Operacion exitosa</h1>
+    <p><!-- TODO: mensaje, ej "El dispositivo fue registrado correctamente" --></p>
+    <a href="RUTA_DEL_LISTADO">Ver listado</a>
+</body>
+</html>
+
+
+------------------------------------------------------------------------
+PLANTILLA 7 - Menu / navegacion simple (para poner arriba de cada pagina)
+Util si el examen tiene varias pantallas y quieres moverte entre ellas facil
+------------------------------------------------------------------------
+
+<nav>
+    <a href="RUTA_1">Ver listado</a> |
+    <a href="RUTA_2">Agregar nuevo</a> |
+    <a href="RUTA_3">Otra pantalla</a>
+</nav>
+
+
+------------------------------------------------------------------------
+PLANTILLA 8 - Detalle de un solo elemento (mostrar info de un id especifico)
+Usalo para "mostrar el detalle de un X segun su id"
+------------------------------------------------------------------------
+
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Detalle</title></head>
+<body>
+    <h1>Detalle</h1>
+
+    <!--
+        Igual que en la plantilla de tabla: si esto sale de un Servlet,
+        aqui van variables Java concatenadas al HTML, ej:
+
+        out.println("<p>Id: " + entidad.getId() + "</p>");
+        out.println("<p>Nombre: " + entidad.getNombre() + "</p>");
+
+        Si es JSP con EL:
+        <p>Id: ${entidad.id}</p>
+        <p>Nombre: ${entidad.nombre}</p>
+    -->
+    <p>Id: VALOR</p>
+    <p>Nombre: VALOR</p>
+    <p>Campo: VALOR</p>
+
+    <a href="RUTA_EDITAR?id=ID_ACTUAL">Editar</a> |
+    <a href="RUTA_LISTADO">Volver</a>
+</body>
+</html>
+
+
+------------------------------------------------------------------------
+NOTAS RAPIDAS
+------------------------------------------------------------------------
+- <a href="..."> siempre dispara GET (para navegar / consultar)
+- <form method="post"> dispara POST (para crear / modificar / enviar datos)
+- El "name" de cada <input> DEBE coincidir exacto con el
+  req.getParameter("nombre") que lea el Servlet correspondiente
+- El "action" del form y el "href" de los links DEBEN coincidir exacto
+  con el @WebServlet("/ruta") del servlet que los debe atender
+- input type="number" -> valida solo numeros enteros en el navegador
+- input type="number" step="any" -> permite decimales
+- required -> el navegador no deja enviar el form si el campo esta vacio

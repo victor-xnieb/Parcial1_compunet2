@@ -1,0 +1,374 @@
+========================================================================
+PLANTILLAS DE SERVLETS - Spring Context + Servlets (sin Spring MVC)
+========================================================================
+Copia el bloque que necesites y reemplaza los // TODO segun el enunciado.
+Todas asumen que el bean se obtiene desde el ApplicationContext de Spring.
+Cambia "MiEntidad" / "MiEntidadService" por los nombres reales del examen.
+========================================================================
+
+
+------------------------------------------------------------------------
+PLANTILLA 1 - Servlet que MUESTRA algo (listar / consultar) -> doGet
+Usalo cuando el enunciado dice: "mostrar", "listar", "consultar", "ver"
+------------------------------------------------------------------------
+
+package com.exam.app.servlet;
+
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
+
+// TODO: cambiar la ruta segun lo que pida el enunciado
+@WebServlet("/listar-algo")
+public class ListarAlgoServlet extends HttpServlet {
+
+    // TODO: cambiar por el tipo de Service que necesites (interfaz, no la implementacion)
+    private MiEntidadService service;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        ServletContext servletContext = getServletContext();
+        WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+        // TODO: si el profesor pide getBean por nombre en vez de por clase, usar:
+        // this.service = (MiEntidadService) ctx.getBean("miEntidadService");
+        this.service = ctx.getBean(MiEntidadService.class);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+
+        // TODO: llamar al metodo del service que trae los datos a mostrar
+        Collection<?> datos = service.obtenerTodos();
+
+        try (PrintWriter out = resp.getWriter()) {
+            out.println("<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Listado</title></head><body>");
+            out.println("<h1>Listado</h1><table border='1'>");
+            out.println("<tr><th>Campo1</th><th>Campo2</th></tr>"); // TODO: encabezados reales
+
+            for (Object item : datos) {
+                // TODO: reemplazar por los getters reales del objeto
+                out.println("<tr><td>" + item + "</td></tr>");
+            }
+
+            out.println("</table></body></html>");
+        }
+    }
+}
+
+
+------------------------------------------------------------------------
+PLANTILLA 2 - Servlet que MUESTRA UN FORMULARIO -> doGet
+Usalo cuando el enunciado dice: "crear un formulario para..."
+No necesita hablar con el Service casi nunca (solo pinta HTML estatico)
+------------------------------------------------------------------------
+
+package com.exam.app.servlet;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+// TODO: cambiar la ruta
+@WebServlet("/formulario-algo")
+public class FormularioAlgoServlet extends HttpServlet {
+
+    // No hay init() porque este servlet no necesita ningun bean de Spring
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = resp.getWriter()) {
+            out.println("<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Formulario</title></head><body>");
+            out.println("<h1>Registrar</h1>");
+            // TODO: el action debe apuntar al servlet que PROCESA el formulario (ver plantilla 3)
+            out.println("<form method='post' action='procesar-algo'>");
+            out.println("Campo1: <input type='text' name='campo1' required><br>");
+            out.println("Campo2 (numero): <input type='number' name='campo2' required><br>");
+            out.println("<button type='submit'>Registrar</button>");
+            out.println("</form></body></html>");
+        }
+    }
+}
+
+
+------------------------------------------------------------------------
+PLANTILLA 3 - Servlet que PROCESA un formulario (crear/registrar) -> doPost
+Usalo cuando el enunciado dice: "agregar", "registrar", "crear"
+Incluye el patron de validar reglas de negocio y mostrar alertas HTML
+------------------------------------------------------------------------
+
+package com.exam.app.servlet;
+
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+// TODO: cambiar la ruta (debe coincidir con el "action" del formulario)
+@WebServlet("/procesar-algo")
+public class ProcesarAlgoServlet extends HttpServlet {
+
+    private MiEntidadService service;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        ServletContext servletContext = getServletContext();
+        WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+        this.service = ctx.getBean(MiEntidadService.class);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+
+        try (PrintWriter out = resp.getWriter()) {
+            try {
+                // TODO: leer y parsear los parametros reales del formulario
+                String campo1 = req.getParameter("campo1");
+                double campo2 = Double.parseDouble(req.getParameter("campo2"));
+
+                // TODO: llamar al metodo del service que valida las reglas de negocio y guarda
+                service.registrar(campo1, campo2);
+
+                out.println("<!DOCTYPE html><html><body>");
+                out.println("<h1>Registrado correctamente</h1>");
+                out.println("<a href='formulario-algo'>Volver</a>");
+                out.println("</body></html>");
+
+            } catch (NumberFormatException e) {
+                // parametros invalidos / vacios
+                out.println("<!DOCTYPE html><html><body>");
+                out.println("<h1>Error</h1><p>Parametros invalidos.</p>");
+                out.println("<a href='formulario-algo'>Volver a intentar</a>");
+                out.println("</body></html>");
+
+            } catch (RuntimeException e) {
+                // TODO: aqui caen las excepciones de reglas de negocio que lance el Service
+                // ej: OutOfRangeException, DuplicateTimestampException, etc.
+                out.println("<!DOCTYPE html><html><body>");
+                out.println("<h1>Alerta</h1><p>" + e.getMessage() + "</p>");
+                out.println("<a href='formulario-algo'>Volver a intentar</a>");
+                out.println("</body></html>");
+            }
+        }
+    }
+
+    // Opcional: si quieres que la misma URL tambien muestre el formulario por GET
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // TODO: redirigir o reusar la plantilla 2 si el enunciado lo pide
+        resp.sendRedirect("formulario-algo");
+    }
+}
+
+
+------------------------------------------------------------------------
+PLANTILLA 4 - Servlet que ACTUALIZA/EDITA algo existente -> doGet + doPost
+Usalo cuando el enunciado dice: "editar", "actualizar", "modificar"
+El doGet trae los datos actuales y los precarga en un formulario;
+el doPost recibe los cambios y los guarda.
+------------------------------------------------------------------------
+
+package com.exam.app.servlet;
+
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+// TODO: cambiar la ruta
+@WebServlet("/editar-algo")
+public class EditarAlgoServlet extends HttpServlet {
+
+    private MiEntidadService service;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        this.service = ctx.getBean(MiEntidadService.class);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+
+        // TODO: obtener el id desde el query string, ej: /editar-algo?id=3
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        Object entidad = service.buscarPorId(id); // TODO: metodo real del service
+
+        try (PrintWriter out = resp.getWriter()) {
+            out.println("<!DOCTYPE html><html><body>");
+            out.println("<form method='post' action='editar-algo'>");
+            out.println("<input type='hidden' name='id' value='" + id + "'>");
+            // TODO: precargar los campos reales con los valores actuales de "entidad"
+            out.println("Campo1: <input type='text' name='campo1' value='VALOR_ACTUAL'><br>");
+            out.println("<button type='submit'>Guardar cambios</button>");
+            out.println("</form></body></html>");
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        String campo1 = req.getParameter("campo1");
+
+        // TODO: metodo real del service para actualizar
+        service.actualizar(id, campo1);
+
+        // Patron Post-Redirect-Get: evita reenviar el POST si el usuario recarga
+        resp.sendRedirect("listar-algo");
+    }
+}
+
+
+------------------------------------------------------------------------
+PLANTILLA 5 - Servlet que ELIMINA algo -> doGet o doPost (segun se pida)
+Usalo cuando el enunciado dice: "eliminar", "borrar", "dar de baja"
+------------------------------------------------------------------------
+
+package com.exam.app.servlet;
+
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import java.io.IOException;
+
+// TODO: cambiar la ruta
+@WebServlet("/eliminar-algo")
+public class EliminarAlgoServlet extends HttpServlet {
+
+    private MiEntidadService service;
+
+    @Override
+    public void init() throws ServletException {
+        WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        this.service = ctx.getBean(MiEntidadService.class);
+    }
+
+    // Nota: borrar algo con GET (por ejemplo desde un link <a href="eliminar-algo?id=3">)
+    // no es estrictamente correcto segun HTTP (GET no deberia tener efectos secundarios),
+    // pero en examenes cortos de Servlets basicos es comun verlo asi por simplicidad.
+    // Si el profesor exige buenas practicas, usa un <form method="post"> en vez de un link.
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        service.eliminar(id); // TODO: metodo real del service
+
+        resp.sendRedirect("listar-algo");
+    }
+}
+
+
+------------------------------------------------------------------------
+PLANTILLA 6 - Servlet usando getBean por NOMBRE en vez de por clase
+Usalo si el profesor pide explicitamente ese estilo (ver beans.xml con id)
+------------------------------------------------------------------------
+
+@Override
+public void init() throws ServletException {
+    WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+    // TODO: el String debe coincidir EXACTO con el id del bean en beans.xml
+    this.service = (MiEntidadService) ctx.getBean("miEntidadService");
+}
+
+
+------------------------------------------------------------------------
+PLANTILLA 7 - Servlet que reenvia (forward) a un JSP en vez de escribir HTML
+Usalo si el profesor pide trabajar con archivos .jsp en webapp/
+------------------------------------------------------------------------
+
+package com.exam.app.servlet;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import java.io.IOException;
+import java.util.Collection;
+
+// TODO: cambiar la ruta
+@WebServlet("/listar-jsp")
+public class ListarJspServlet extends HttpServlet {
+
+    private MiEntidadService service;
+
+    @Override
+    public void init() throws ServletException {
+        WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        this.service = ctx.getBean(MiEntidadService.class);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Collection<?> datos = service.obtenerTodos();
+
+        // request.setAttribute deja el dato disponible para que el JSP lo lea con ${nombre}
+        req.setAttribute("datos", datos);
+
+        // TODO: cambiar la ruta del jsp (normalmente dentro de /WEB-INF/views/ o directo en webapp/)
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/listado.jsp");
+        dispatcher.forward(req, resp);
+    }
+}
+
+
+------------------------------------------------------------------------
+NOTAS RAPIDAS PARA DECIDIR QUE PLANTILLA USAR
+------------------------------------------------------------------------
+- El enunciado dice "mostrar/listar/consultar/ver"        -> Plantilla 1
+- El enunciado dice "formulario para..."                  -> Plantilla 2
+- El enunciado dice "agregar/registrar/crear"              -> Plantilla 2 (form) + 3 (procesa)
+- El enunciado dice "editar/actualizar/modificar"          -> Plantilla 4
+- El enunciado dice "eliminar/borrar"                      -> Plantilla 5
+- El profesor usa .jsp en vez de HTML escrito a mano       -> Plantilla 7
+- El profesor pide getBean por nombre (no por clase)       -> Plantilla 6
+
+RECORDATORIO:
+- doGet = leer/mostrar, sin efectos secundarios
+- doPost = crear/modificar datos, viene de un <form method="post">
+- init() solo hace falta si el servlet necesita un bean de Spring
+- La ruta del @WebServlet debe coincidir EXACTO con el href/action del HTML que lo llama
