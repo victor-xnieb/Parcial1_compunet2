@@ -2,7 +2,9 @@ package com.compunet.springboot.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.compunet.springboot.model.Curso;
 import com.compunet.springboot.model.Profesor;
+import com.compunet.springboot.repository.CursoRepository;
 import com.compunet.springboot.repository.ProfesorRepository;
 
 import java.util.List;
@@ -17,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class Controller {
 
     private ProfesorRepository profeRepo;
+    private CursoRepository cursoRepo;
 
     @Autowired
-    public Controller(ProfesorRepository profeRepo) {
+    public Controller(ProfesorRepository profeRepo, CursoRepository cursoRepo) {
         this.profeRepo = profeRepo;
+        this.cursoRepo = cursoRepo;
     }
 
     @GetMapping("/")
@@ -33,6 +37,12 @@ public class Controller {
     public List<Profesor> getProfesores() {
         return profeRepo.findAll();
     }
+
+    @GetMapping("/curso")
+    public List<Curso> getMethodName() {
+        return cursoRepo.findAll();
+    }
+    
     
 
     

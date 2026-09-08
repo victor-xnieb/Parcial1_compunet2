@@ -1,5 +1,7 @@
 package com.compunet.springboot.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,5 +42,9 @@ public class Profesor {
 
     @Column(name = "active", nullable = false)
     private boolean active;
+
+
+    
+    private List<Curso> cursos;
     
 }

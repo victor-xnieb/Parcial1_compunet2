@@ -9,9 +9,9 @@ INSERT INTO Profesor (name, apellido, email, active) VALUES ('Alejdnro','Munoz',
 INSERT INTO Profesor (name, apellido, email, active) VALUES ('Kevin','Rodriguez','kRodriguez@icesi.edu.co', TRUE);
 
 
-INSERT INTO Curso (name, creditos, departamento, profesor_id) VALUES ('APO1', 3, 'Computacion y Sistemas', 1, 1);
-INSERT INTO Curso (name, creditos, departamento, profesor_id) VALUES ('APO2', 3, 'Computacion y Sistemas', 1, 1);
-INSERT INTO Curso (name, creditos, departamento, profesor_id) VALUES ('APO3', 3, 'Computacion y Sistemas', 1, 1);
+INSERT INTO Curso (name, creditos, departamento, profesor_id) VALUES ('APO1', 3, 'Computacion y Sistemas', 1 );
+INSERT INTO Curso (name, creditos, departamento, profesor_id) VALUES ('APO2', 3, 'Computacion y Sistemas', 1 );
+INSERT INTO Curso (name, creditos, departamento, profesor_id) VALUES ('APO3', 3, 'Computacion y Sistemas', 1);
 
 
 

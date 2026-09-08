@@ -39,7 +39,7 @@ public class Curso {
 
 
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "profesor_id", nullable = false) 
+    @JoinColumn (name = "profesor_id", nullable = false)
     private Profesor profesor;
 
     
