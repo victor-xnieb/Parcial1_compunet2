@@ -2,6 +2,10 @@ package com.compunet.springboot.model;
 
 import java.util.List;
 
+import org.springframework.boot.jackson.autoconfigure.JacksonProperties.Json;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +37,9 @@ public class Departamento {
     @Column (name = "edificio", nullable = true)
     private String edificio;
 
+
     @OneToMany(mappedBy = "departamento")
+    @JsonIgnoreProperties(value = "departamento")
     private List<Profesor> profesores;
 
 }
