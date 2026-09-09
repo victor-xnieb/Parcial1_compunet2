@@ -2,6 +2,9 @@ package com.compunet.springboot.model;
 
 import org.hibernate.annotations.ManyToAny;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,9 +42,8 @@ public class Curso {
 
 
     @ManyToOne (fetch = FetchType.LAZY)
+    @JsonIgnoreProperties( value = "cursos")
     @JoinColumn (name = "profesor_id", nullable = false)
     private Profesor profesor;
-
-    
     
 }

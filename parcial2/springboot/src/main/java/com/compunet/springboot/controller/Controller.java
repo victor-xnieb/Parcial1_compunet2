@@ -1,30 +1,28 @@
 package com.compunet.springboot.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.compunet.springboot.model.Curso;
+import com.compunet.springboot.model.Departamento;
 import com.compunet.springboot.model.Profesor;
 import com.compunet.springboot.repository.CursoRepository;
+import com.compunet.springboot.repository.DepartamentoRepository;
 import com.compunet.springboot.repository.ProfesorRepository;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-
 
 @RestController
 public class Controller {
 
     private ProfesorRepository profeRepo;
     private CursoRepository cursoRepo;
+    private DepartamentoRepository deptRepo;
 
     @Autowired
-    public Controller(ProfesorRepository profeRepo, CursoRepository cursoRepo) {
+    public Controller(ProfesorRepository profeRepo, CursoRepository cursoRepo, DepartamentoRepository deptRepo) {
         this.profeRepo = profeRepo;
         this.cursoRepo = cursoRepo;
+        this.deptRepo = deptRepo;
     }
 
     @GetMapping("/")
@@ -39,11 +37,13 @@ public class Controller {
     }
 
     @GetMapping("/curso")
-    public List<Curso> getMethodName() {
+    public List<Curso> getCursos() {
         return cursoRepo.findAll();
     }
-    
-    
 
-    
+    @GetMapping("/departamento")
+    public List<Departamento> getDepartamentos() {
+        return deptRepo.findAll();
+    }
+
 }
